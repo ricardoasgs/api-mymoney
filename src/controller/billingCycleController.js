@@ -27,7 +27,8 @@ BillingCycle.route("summary", (req, res, next) => {
       }
     },
     {
-      // Efetua os agrupamentos
+      /* Efetua os agrupamentos, no caso sem agrupamentos, 
+      mas poderia inserir um campo como "$year" ao invez de null em _id */
       $group: {
         _id: null,
         credit: { $sum: "$credit" },
