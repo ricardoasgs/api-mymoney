@@ -19,26 +19,28 @@ BillingCycle.route("count", (req, res, next) => {
 
 BillingCycle.route("summary", (req, res, next) => {
   BillingCycle.aggregate(
-    {
-      // Informa qual o criterio que será usado
-      $project: {
-        credit: { $sum: "$credits.value" },
-        debt: { $sum: "$debts.value" }
-      }
-    },
-    {
-      /* Efetua os agrupamentos, no caso sem agrupamentos, 
+    [
+      {
+        // Informa qual o criterio que será usado
+        $project: {
+          credit: { $sum: "$credits.value" },
+          debt: { $sum: "$debts.value" }
+        }
+      },
+      {
+        /* Efetua os agrupamentos, no caso sem agrupamentos,
       mas poderia inserir um campo como "$year" ao invez de null em _id */
-      $group: {
-        _id: null,
-        credit: { $sum: "$credit" },
-        debt: { $sum: "$debt" }
+        $group: {
+          _id: null,
+          credit: { $sum: "$credit" },
+          debt: { $sum: "$debt" }
+        }
+      },
+      {
+        // Informa quais informações serão disponibilizadas
+        $project: { _id: 0, credit: 1, debt: 1 }
       }
-    },
-    {
-      // Informa quais informações serão disponibilizadas
-      $project: { _id: 0, credit: 1, debt: 1 }
-    },
+    ],
     (error, result) => {
       if (error) {
         res.status(500).json({ errors: [error] });
