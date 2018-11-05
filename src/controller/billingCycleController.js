@@ -17,9 +17,14 @@ BillingCycle.route("count", (req, res, next) => {
   });
 });
 
-BillingCycle.route("summary", (req, res, next) => {
+BillingCycle.summary = async function(req, res) {
   BillingCycle.aggregate(
     [
+      {
+        $match: {
+          userId: req.params.id
+        }
+      },
       {
         // Informa qual o criterio que será usado
         $project: {
@@ -49,6 +54,5 @@ BillingCycle.route("summary", (req, res, next) => {
       }
     }
   );
-});
-
+};
 module.exports = BillingCycle;

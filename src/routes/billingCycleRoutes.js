@@ -18,4 +18,5 @@ module.exports = app => {
   router.use(auth);
 
   BillingCycle.register(router, "/billingCycles");
+  router.get("/billingCycles/summary/:id", BillingCycle.summary);
 };
